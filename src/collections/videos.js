@@ -2,17 +2,18 @@ var Videos = Backbone.Collection.extend({
 
   model: Video,
 
-  initialize: function () {
-    this.search();
+  initialize: function (model, options) {
+    let query = ' ';
+    this.search(query, options.cb);
     //console.log(this.models);
     //this.on('sync', videos[0]);
   },
 
-  search: function(data) {
+  search: function(query, cb) {
     Backbone.ajax({
       type: 'GET',
       data: {
-        q: data,
+        q: query,
         key: window.YOUTUBE_API_KEY,
         part: 'snippet',
         maxResults: 5
@@ -21,6 +22,7 @@ var Videos = Backbone.Collection.extend({
       success: (data) => {
         //console.log(data);
         this.set(this.parse(data));
+        cb();
       },
       error: function(data) {
         //console.log('failed to get message: ', data);
