@@ -5,11 +5,9 @@ var Videos = Backbone.Collection.extend({
   initialize: function (model, options) {
     let query = ' ';
     this.search(query, options.cb);
-    //console.log(this.models);
-    //this.on('sync', videos[0]);
   },
 
-  search: function(query, cb) {
+  search: function(query, cb = () => {}) {
     Backbone.ajax({
       type: 'GET',
       data: {
@@ -22,6 +20,7 @@ var Videos = Backbone.Collection.extend({
       success: (data) => {
         //console.log(data);
         this.set(this.parse(data));
+        this.trigger('load');
         cb();
       },
       error: function(data) {
